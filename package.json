@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "postinstall": "husky install",
+    "convert": "node convertNotionToGitbook.js",
+    "create": "node createLog.js"
+  }
+}
