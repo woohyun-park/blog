@@ -1,7 +1,13 @@
 {
   "scripts": {
     "postinstall": "husky install",
-    "convert": "node convertNotionToGitbook.js",
-    "create": "node createLog.js"
+    "convert": "npm run build && node lib/functions/convert.js",
+    "create": "npm run build && node lib/functions/create.js",
+    "build": "babel .src -d lib --copy-files"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1"
   }
 }
