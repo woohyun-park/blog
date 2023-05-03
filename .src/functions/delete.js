@@ -1,4 +1,4 @@
-import { createDoc, createSummary, deleteFiles } from "../apis/file";
+import { createDoc, createSummary, deleteFiles } from "../apis";
 
 export function deleteDoc() {
   const summary = deleteFiles(process.argv[2]);
