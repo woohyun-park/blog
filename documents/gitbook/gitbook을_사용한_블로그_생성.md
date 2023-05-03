@@ -1,4 +1,4 @@
-# gitbook을\_사용한\_블로그\_생성
+# gitbook을 사용한 블로그\_생성
 
 ## gitbook을 선택한 이유
 
@@ -53,7 +53,7 @@ blog
 ```
 {% endcode %}
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5dbec441-040c-4aa4-8216-472516b31460/Untitled.png)
+<figure><img src="../../.gitbook/assets/Untitled (2).png" alt=""><figcaption></figcaption></figure>
 
 또한 문서를 생성 또는 삭제할때마다 폴더구조와 함께 SUMMARY.md의 목차도 변경된다.
 
@@ -271,6 +271,12 @@ export const CODE = {
 * [ ] 변경사항 감지하여 build
 * [ ] batch 작업 구현
 
+## 업데이트
+
+근데 사용해보니 드래그가 안되는것 빼고는 노션이랑 크게 다르지 않고, 코드로 작성할때랑 깃북이랑 연동되지 않는 자잘한 부분들도 많이 있을뿐만 아니라, 결정적으로 노션에서 작성하고 붙여넣었을 때 이미지는 따로 업로드해야한다는 불편함 때문에 그냥 깃북에 적응해보려고 한다...
+
+뻘짓한것 같아서 아쉽지만 그래도 node 환경에서 cli를 간단하게나마 만들어보는 경험, husky를 사용해서 자동화하는 경험 등 평소에 프론트 개발만 할때와는 다른 다층적인 경험들을 해볼 수 있어서 좋았다
+
 ## 태그
 
-\#gitbook #babel #husky #regex
+\#gitbook #babel #husky #regex #node.js

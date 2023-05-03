@@ -10,4 +10,4 @@
 ## documents
 
 * [gitbook](documents/gitbook/README.md)
-  * [gitbook을\_사용한\_블로그\_생성](documents/gitbook/gitbook을\_사용한\_블로그\_생성.md)
+  * [gitbook을 사용한 블로그\_생성](documents/gitbook/gitbook을\_사용한\_블로그\_생성.md)
