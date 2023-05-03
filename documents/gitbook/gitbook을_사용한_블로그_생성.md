@@ -4,6 +4,7 @@
 
 예전에 tistory랑 velog를 모두 사용해 봤었는데, tistory는 이슈가 많은 것 같고, velog는 전에 쓰던 계정을 찾을수가 없어서 github pages를 통해서 새롭게 시작하려고 알아보던 도중, gitbook을 사용해서 til을 기록하는분이 있길래 gitbook에 대해서 찾아보니 다음과 같은 이유로 블로그에 사용하기 좋아보였다
 
+* 깃을 통한 히스토리 지원
 * 여러 문서를 작성하는 툴로 많이 활용
 * 별다른 설정 없이 깔끔한 UI를 제공
 * 잔디심기에 조그만 도움
@@ -13,14 +14,8 @@
 gitbook을 설정하는것은 어렵지 않았는데, gitbook에서 지원하는 에디터는 생각보다 불편했기 때문에 내가 평소에 개발일지를 작성하는 노션에 글을 적고 gitbook으로 옮길 수 있도록 자동화하였다. 완성된 블로그 작성 파이프라인은 다음과 같다.
 
 1. 노션에서 기존에 작성하던 방식으로 개발일지를 작성
-2. npm run create을 사용해서 개발일지를 생성
-
-{% code overflow="wrap" lineNumbers="true" %}
-```
-npm run create documents/gitbook/gitbook을_사용한_블로그_생성
-```
-{% endcode %}
-
+2. npm run create을 사용해서 개발일지를 생성\
+   e.g. `npm run create documents/gitbook/gitbook을_사용한_블로그_생성`
 3. 변경사항을 add하고 commit하면 pre-commit 훅을 통해 자동으로 notion → gitbook 변환
 4. commit message를 작성하고 origin/main에 push
 
@@ -36,7 +31,6 @@ gitbook은 데이터를 크게 3가지 계층으로 구분한다.
 * **page**: `next.js`, `react.js`, `gitbook`이 해당하는 그룹이며, 폴더와 README.md를 포함한다.
 * **subPage**: `gitbook을_사용한_블로그_생성.md`가 해당하는 하위 그룹이며, 실질적인 블로그 포스팅 작성을 하는 파일을 포함한다.
 
-{% code overflow="wrap" lineNumbers="true" %}
 ```
 blog
 ├── README.md
@@ -51,15 +45,13 @@ blog
     └── react.js
         └── README.md
 ```
-{% endcode %}
 
 <figure><img src="../../.gitbook/assets/Untitled (2).png" alt=""><figcaption></figcaption></figure>
 
 또한 문서를 생성 또는 삭제할때마다 폴더구조와 함께 SUMMARY.md의 목차도 변경된다.
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code title="SUMMARY.md" %}
 ```
-// SUMMARY.md
 # Table of contents
 
 - [woohyun-park](README.md)
@@ -78,46 +70,27 @@ blog
 
 ### 구현방법
 
-따라서 해당 계층구조를 저장할 수 있는 파일을 저장하고 (summary.json), 생성 및 삭제시마다 해당 파일을 업데이트하는 방식을 사용하였다.
+따라서 해당 계층구조를 저장할 수 있는 파일을 저장하고 생성 및 삭제시마다 해당 파일을 업데이트하는 방식을 사용하였다.
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code title="consts/summary.json" %}
 ```
-// sumamry.json
 {"frameworks":{"next.js":[],"react.js":[]},"documents":{"gitbook":["gitbook을_사용한_블로그_생성"]}}
 ```
 {% endcode %}
 
 create와 delete의 실행순서는 다음과 같다.
 
-{% code overflow="wrap" lineNumbers="true" %}
-```
-// 1. group, page, 또는 subPage 파일을 생성 또는 삭제한다
-// 2. summary.json 파일을 업데이트한다
-// 3. SUMMARY.md 파일을 업데이트한다
-
-// create.js
-function create() {
-  const summary = createFiles(process.argv[2]);
-  createSummary(summary);
-  createDoc(summary);
-}
-
-// delete.js
-function deleteDoc() {
-  const summary = deleteFiles(process.argv[2]);
-  createSummary(summary);
-  createDoc(summary);
-}
-```
-{% endcode %}
+1. group, page, 또는 subPage 파일을 생성 또는 삭제한다
+2. summary.json 파일을 업데이트한다
+3. SUMMARY.md 파일을 업데이트한다
 
 #### babel 사용
 
-node.js 환경에서는 import와 export문을 사용할 수 없어서 es6로 작성하고 babel을 통해 트랜스파일링하는 과정을 자동화하였다. convert, create, delete시에 npm run build를 통해 소스파일들을 트랜스파일링하고 해당 작업을 실행한다.
+node.js 환경에서는 import와 export문을 사용할 수 없어서 babel을 통해 트랜스파일링하는 과정을 자동화하였다. convert, create, delete시에 npm run build를 통해 소스파일들을 트랜스파일링하고 해당 작업을 실행한다.
 
-하지만 npm run build를 매번 실행하게 되는데, change가 detect 되었을때만 build를 실행할 수 있는 방법을 찾아보면 좋겠다 (다음 단계 1)
+하지만 npm run build를 매번 실행하게 되는데, build할 파일들의 change가 detect 되었을때만 build를 실행할 수 있는 방법을 찾아보면 좋겠다 (다음 단계 1)
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code title="package.json" %}
 ```
 "scripts": {
   "postinstall": "husky install",
@@ -133,9 +106,8 @@ node.js 환경에서는 import와 export문을 사용할 수 없어서 es6로 �
 
 파일을 생성 또는 삭제하는 분기점마다 에러를 throw하고 catch하여 작업이 어디까지 완료되었는지 손쉽게 알 수 있도록 했다.
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code title="utils/error.js" %}
 ```
-// utils/error.js
 export function wrapCatch(func, target, type = "creat") {
   try {
     const res = func();
@@ -145,8 +117,11 @@ export function wrapCatch(func, target, type = "creat") {
     throw `Error: ${e.message}`;
   }
 }
+```
+{% endcode %}
 
-// functions/create.js
+{% code title="functions/create.js" %}
+```
 export function createSummary(summary) {
   wrapCatch(() => {
     fs.writeFile(TARGET_SUMMARY, JSON.stringify(summary), "utf8", (e) => {
@@ -161,14 +136,13 @@ export function createSummary(summary) {
 
 #### 폴더 모듈화
 
-팀플을 하다보니 기능별로 세세하게 모듈화하는게 중요하다고 느껴서 폴더 모듈화에 신경썼다.
+팀플을 하다보니 개인 프로젝트를 할 때에도 기능별로 세세하게 모듈화하는게 중요하다고 느껴서 폴더 모듈화에 신경썼다.
 
 * **api**: fs을 사용하는 함수들
 * **const**: 각종 상수들
 * **functions**: 실질적으로 실행하게 되는 함수들
 * **utils**: 전역에서 도움을 줄 수 있는 함수들
 
-{% code overflow="wrap" lineNumbers="true" %}
 ```
 .src
 ├── apis
@@ -188,7 +162,6 @@ export function createSummary(summary) {
 └── utils
     └── error.js
 ```
-{% endcode %}
 
 ## gitbook → notion
 
@@ -198,22 +171,20 @@ notion과 gitbook의 마크다운 형식이 살짝 다른 부분이 있어서 �
 
 #### husky 사용
 
-husky를 사용하여 pre-commit 훅이 작동하여 자동으로 마크다운이 노션 → 깃북으로 변경되고 stage하도록 설정했다.
+husky를 사용하여 pre-commit 훅이 작동하여 자동으로 마크다운이 노션 → 깃북으로 변경되고 stage하여 바로 커밋을 할 수 있도록 설정했다.
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code title=".husky/pre-commit" %}
 ```
-// .husky/pre-commit
 npm run convert && git add .
 ```
 {% endcode %}
 
 #### replace
 
-convert의 경우에는 replace라는 라이브러리를 통해 간단하게 구현했다. option과 regex를 제공하면 알아서 해당 부분을 replace해주는 형식이다.
+convert의 경우에는 replace라는 라이브러리를 통해 간단하게 구현했다. option과 regex를 제공하면 알아서 해당 부분을 치환해주는 형식이다.
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code title="const/convert.js" %}
 ```
-// consts/convert.js
 export const OPTION = {
   paths: ["."],
   include: "*.md",
@@ -223,14 +194,13 @@ export const OPTION = {
 
 export const CALLOUT = {
   regex: `<aside>\n💡 ([\\S\\s]*?)<\/aside>`,
-  replacement: `
-
-<div data-gb-custom-block data-tag="hint" data-style='info'>\n$1</div>
-
-`,
+  replacement: `<div data-gb-custom-block data-tag="hint" data-style='info'>\n$1</div>`,
 };
+```
+{% endcode %}
 
-// functions/convert.js
+{% code title="functions/convert.js" %}
+```
 replace({ ...OPTION, ...CODE });
 ```
 {% endcode %}
@@ -248,14 +218,11 @@ replace({ ...OPTION, ...CODE });
 {% endraw %}
 ```
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code title="consts/convert.js" %}
 ````
-// consts/convert.js
 export const CALLOUT = {
   regex: `<aside>\n💡 ([\\S\\s]*?)<\/aside>`,
-  replacement: `
-
-<div data-gb-custom-block data-tag="hint" data-style='info'>\n$1</div>`,
+  replacement: `<div data-gb-custom-block data-tag="hint" data-style='info'>\n$1</div>`,
 };
 
 export const CODE = {
@@ -278,7 +245,7 @@ export const CODE = {
 
 근데 사용해보니 드래그가 안되는것 빼고는 노션이랑 크게 다르지 않고, 코드로 작성할때랑 깃북이랑 연동되지 않는 자잘한 부분들도 많이 있을뿐만 아니라, 결정적으로 노션에서 작성하고 붙여넣었을 때 이미지는 따로 업로드해야한다는 불편함 때문에 그냥 깃북에 적응해보려고 한다...
 
-뻘짓한것 같아서 아쉽지만 그래도 node 환경에서 cli를 간단하게나마 만들어보는 경험, husky를 사용해서 자동화하는 경험 등 평소에 프론트 개발만 할때와는 다른 다층적인 경험들을 해볼 수 있어서 좋았다
+뻘짓한것 같아서 아쉽지만 그래도 node 환경에서 cli를 간단하게나마 만들어보는 경험, husky를 사용해서 자동화하는 경험 등 평소에 프론트 개발만 할때와는 다른 다층적인 경험들을 해볼 수 있어서 좋았다.
 
 ## 태그
 
