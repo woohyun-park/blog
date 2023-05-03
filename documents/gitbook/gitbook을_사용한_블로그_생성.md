@@ -15,7 +15,7 @@ gitbook을 설정하는것은 어렵지 않았는데, gitbook에서 지원하는
 1. 노션에서 기존에 작성하던 방식으로 개발일지를 작성
 2. npm run create을 사용해서 개발일지를 생성
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code overflow='wrap' lineNumbers='true' %}
 ```
 npm run create documents/gitbook/gitbook을_사용한_블로그_생성
 ```
@@ -36,7 +36,7 @@ gitbook은 데이터를 크게 3가지 계층으로 구분한다.
 * **page**: `next.js`, `react.js`, `gitbook`이 해당하는 그룹이며, 폴더와 README.md를 포함한다.
 * **subPage**: `gitbook을_사용한_블로그_생성.md`가 해당하는 하위 그룹이며, 실질적인 블로그 포스팅 작성을 하는 파일을 포함한다.
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code overflow='wrap' lineNumbers='true' %}
 ```
 blog
 ├── README.md
@@ -57,7 +57,7 @@ blog
 
 또한 문서를 생성 또는 삭제할때마다 폴더구조와 함께 SUMMARY.md의 목차도 변경된다.
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code overflow='wrap' lineNumbers='true' %}
 ```
 // SUMMARY.md
 # Table of contents
@@ -80,7 +80,7 @@ blog
 
 따라서 해당 계층구조를 저장할 수 있는 파일을 저장하고 (summary.json), 생성 및 삭제시마다 해당 파일을 업데이트하는 방식을 사용하였다.
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code overflow='wrap' lineNumbers='true' %}
 ```
 // sumamry.json
 {"frameworks":{"next.js":[],"react.js":[]},"documents":{"gitbook":["gitbook을_사용한_블로그_생성"]}}
@@ -89,7 +89,7 @@ blog
 
 create와 delete의 실행순서는 다음과 같다.
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code overflow='wrap' lineNumbers='true' %}
 ```
 // 1. group, page, 또는 subPage 파일을 생성 또는 삭제한다
 // 2. summary.json 파일을 업데이트한다
@@ -117,7 +117,7 @@ node.js 환경에서는 import와 export문을 사용할 수 없어서 es6로 �
 
 하지만 npm run build를 매번 실행하게 되는데, change가 detect 되었을때만 build를 실행할 수 있는 방법을 찾아보면 좋겠다 (다음 단계 1)
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code overflow='wrap' lineNumbers='true' %}
 ```
 "scripts": {
   "postinstall": "husky install",
@@ -133,7 +133,7 @@ node.js 환경에서는 import와 export문을 사용할 수 없어서 es6로 �
 
 파일을 생성 또는 삭제하는 분기점마다 에러를 throw하고 catch하여 작업이 어디까지 완료되었는지 손쉽게 알 수 있도록 했다.
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code overflow='wrap' lineNumbers='true' %}
 ```
 // utils/error.js
 export function wrapCatch(func, target, type = "creat") {
@@ -168,7 +168,7 @@ export function createSummary(summary) {
 * **functions**: 실질적으로 실행하게 되는 함수들
 * **utils**: 전역에서 도움을 줄 수 있는 함수들
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code overflow='wrap' lineNumbers='true' %}
 ```
 .src
 ├── apis
@@ -200,7 +200,7 @@ notion과 gitbook의 마크다운 형식이 살짝 다른 부분이 있어서 �
 
 husky를 사용하여 pre-commit 훅이 작동하여 자동으로 마크다운이 노션 → 깃북으로 변경되고 stage하도록 설정했다.
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code overflow='wrap' lineNumbers='true' %}
 ```
 // ./husky/pre-commit
 npm run convert && git add .
@@ -211,7 +211,7 @@ npm run convert && git add .
 
 convert의 경우에는 replace라는 라이브러리를 통해 간단하게 구현했다. option과 regex를 제공하면 알아서 해당 부분을 replace해주는 형식이다.
 
-{% code overflow="wrap" lineNumbers="true" %}
+{% code overflow='wrap' lineNumbers='true' %}
 ```
 // consts/convert.js
 export const OPTION = {
@@ -245,8 +245,8 @@ replace({ ...OPTION, ...CODE });
 
 → `{% code overflow='wrap' lineNumbers='true' %}`
 
-{% code overflow="wrap" lineNumbers="true" %}
-````
+{% code overflow='wrap' lineNumbers='true' %}
+```
 // consts/convert.js
 export const CALLOUT = {
   regex: `<aside>\n💡 ([\\S\\s]*?)<\/aside>`,
@@ -263,11 +263,8 @@ export const CODE = {
 
 ",
 };
-````
+```
 {% endcode %}
-
-하지만 이 글을 업로드하면서 내용 안에 저 매칭문이 들어갈 경우에 잘못 포맷되는것을 발견했다. 매칭문을 어떻게 포맷
-
 ## 발전 방향
 
 * [ ] 변경사항 감지하여 build

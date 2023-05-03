@@ -12,7 +12,7 @@ export const CALLOUT = {
 
 export const CODE = {
   regex:
-    "\n({% code overflow='wrap' lineNumbers='true' %}\n)*```.*\n([\\S\\s]*?)\n```(\n{% endcode %})*",
+    "({% code overflow=['\"]wrap['\"] lineNumbers=['\"]true['\"] %}\n)*```(.*?)\n([\\S\\s]*?)\n```(\n{% endcode %})*",
   replacement:
-    "\n{% code overflow='wrap' lineNumbers='true' %}\n```\n$2\n```\n{% endcode %}",
+    "{% code overflow='wrap' lineNumbers='true' %}\n```\n$3\n```\n{% endcode %}",
 };
