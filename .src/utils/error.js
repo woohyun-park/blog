@@ -1,10 +1,9 @@
-export function wrapCatch(func, target) {
+export function wrapCatch(func, target, type = "creat") {
   try {
     const res = func();
-    console.log(`${target} has been created!`);
+    console.log(`${target} has been ${type}ed!`);
     return res;
   } catch (e) {
-    console.log(`Error: while creating ${target}`);
-    return console.log(e);
+    throw `Error: ${e.message}`;
   }
 }

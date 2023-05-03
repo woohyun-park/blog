@@ -5,7 +5,8 @@ import { wrapCatch } from "../utils/error";
 function createGroup(summary, group) {
   if (!summary[group]) {
     summary[group] = {};
-    !fs.existsSync(group) && fs.mkdirSync(group);
+    if (!fs.existsSync(group))
+      if (!fs.mkdirSync(group)) throw new Error(`Failed to create ${group}`);
   }
 }
 
@@ -13,8 +14,12 @@ function createPage(summary, group, page) {
   if (!summary[group][page]) {
     summary[group][page] = [];
     if (!fs.existsSync(`${group}/${page}`)) {
-      fs.mkdirSync(`${group}/${page}`);
-      fs.writeFileSync(`${group}/${page}/README.md`, `# ${page}\n\n`);
+      fs.mkdir(`${group}/${page}`, (e) => {
+        if (e) throw new Error(`Failed to create ${group}/${page}`);
+      });
+      fs.writeFile(`${group}/${page}/README.md`, `# ${page}\n\n`, (e) => {
+        if (e) throw new Error(`Failed to create ${group}/${page}/README.md`);
+      });
     }
   }
 }
@@ -23,13 +28,21 @@ function createSubPage(summary, group, page, subPage) {
   if (!summary[group][page].find((e) => e === subPage)) {
     summary[group][page].push(subPage);
     if (!fs.existsSync(`${group}/${page}/${subPage}.md`)) {
-      fs.writeFileSync(`${group}/${page}/${subPage}.md`, `# ${subPage}\n\n`);
+      fs.writeFile(
+        `${group}/${page}/${subPage}.md`,
+        `# ${subPage}\n\n`,
+        (e) => {
+          if (e)
+            throw new Error(`Failed to create ${group}/${page}/${subPage}.md`);
+        }
+      );
     }
   }
 }
 
 export function createFiles(arg) {
   return wrapCatch(() => {
+    if (fs.existsSync(arg)) throw new Error(`${arg} already exists`);
     const summary = { ...SUMMARY };
     const [group, page, subPage] = arg.split("/");
     group && createGroup(summary, group);
@@ -41,7 +54,9 @@ export function createFiles(arg) {
 
 export function createSummary(summary) {
   wrapCatch(() => {
-    fs.writeFileSync(TARGET_SUMMARY, JSON.stringify(summary), "utf8");
+    fs.writeFile(TARGET_SUMMARY, JSON.stringify(summary), "utf8", (e) => {
+      if (e) throw new Error(`Failed to create ${TARGET_SUMMARY}`);
+    });
   }, TARGET_SUMMARY);
 }
 
@@ -57,6 +72,53 @@ export function createDoc(summary) {
         });
       });
     });
-    fs.writeFileSync(TARGET_DOC, result, "utf8");
+    fs.writeFile(TARGET_DOC, result, "utf8", (e) => {
+      if (e) throw new Error(`Failed to create ${TARGET_DOC}`);
+    });
   }, TARGET_DOC);
+}
+
+function deleteSubPage(arg, summary) {
+  const [group, page, subPage] = arg.split("/");
+  if (!fs.existsSync(`${arg}.md`)) throw new Error(`${arg} does not exist`);
+  fs.rm(`${arg}.md`, { recursive: true, force: true }, (e) => {
+    if (e) throw new Error(`Failed to delete ${arg}`);
+  });
+  summary[group][page] = summary[group][page].filter((e) => e !== subPage);
+}
+
+function deletePage(arg, summary) {
+  const [group, page, subPage] = arg.split("/");
+  if (!fs.existsSync(arg)) throw new Error(`${arg} does not exist`);
+  fs.rm(arg, { recursive: true, force: true }, (e) => {
+    if (e) throw new Error(`Failed to delete ${arg}`);
+  });
+  delete summary[group][page];
+}
+
+function deleteGroup(arg, summary) {
+  const [group, page, subPage] = arg.split("/");
+  if (!fs.existsSync(arg)) throw new Error(`${arg} does not exist`);
+  fs.rm(arg, { recursive: true, force: true }, (e) => {
+    if (e) throw new Error(`Failed to delete ${arg}`);
+  });
+  delete summary[group];
+}
+
+export function deleteFiles(arg) {
+  return wrapCatch(
+    () => {
+      const summary = { ...SUMMARY };
+      const [group, page, subPage] = arg.split("/");
+      if (subPage) deleteSubPage(arg, summary);
+      else if (page) deletePage(arg, summary);
+      else if (group) deleteGroup(arg, summary);
+      fs.rm(arg, { recursive: true, force: true }, (e) => {
+        if (e) throw new Error(`Failed to delete ${arg}`);
+      });
+      return summary;
+    },
+    arg,
+    "delet"
+  );
 }

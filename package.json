@@ -3,6 +3,7 @@
     "postinstall": "husky install",
     "convert": "npm run build && node lib/functions/convert.js",
     "create": "npm run build && node lib/functions/create.js",
+    "delete": "npm run build && node lib/functions/delete.js",
     "build": "babel .src -d lib --copy-files"
   },
   "devDependencies": {
