@@ -202,7 +202,7 @@ husky를 사용하여 pre-commit 훅이 작동하여 자동으로 마크다운�
 
 {% code overflow="wrap" lineNumbers="true" %}
 ```
-// ./husky/pre-commit
+// .husky/pre-commit
 npm run convert && git add .
 ```
 {% endcode %}
@@ -266,7 +266,7 @@ export const CODE = {
 ````
 {% endcode %}
 
-\## 발전 방향
+### 발전 방향
 
 * [ ] 변경사항 감지하여 build
 * [ ] batch 작업 구현
