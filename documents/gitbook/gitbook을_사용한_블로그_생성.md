@@ -231,17 +231,17 @@ replace({ ...OPTION, ...CODE });
 
 ### regex
 
-정규표현식은 언제나 어렵다. 노션의 callout을 gitbook의 hit로 변경하는 작업은 aside를 단순하게 hint로 치환하면 되지만, 노션의 code를 gitbook의 code로 변경하는 작업에서는 {% code overflow='wrap' lineNumbers='true' %}
-```부분이 겹쳐서 별다른 처리 없이 치환만 하게되면 계속해서 {code}가 늘어나는 현상이 발생했다.
+정규표현식은 언제나 어렵다. 노션의 callout을 gitbook의 hit로 변경하는 작업은 aside를 단순하게 hint로 치환하면 되지만, 노션의 code를 gitbook의 code로 변경하는 작업에서는 별다른 처리 없이 치환만 하게되면 계속해서 code가 늘어나는 현상이 발생했다.
 
-따라서 아래와 같이 {code} 부분을 `()`를 사용해 그룹으로 묶고 `*`을 사용해 해당 부분이 몇번 반복되던지 하나로 합쳐지도록 변경했다.
+따라서 아래와 같이 code 부분을 `()`를 사용해 그룹으로 묶고 `*`을 사용해 해당 부분이 몇번 반복되던지 하나로 합쳐지도록 변경했다.
 
 `({% code overflow='wrap' lineNumbers='true' %}\n)*`
 
 → `{% code overflow='wrap' lineNumbers='true' %}`
 
+{% code overflow='wrap' lineNumbers='true' %}
 ```
-{% endcode %}`jsx
+{% endcode %}jsx
 // consts/convert.js
 export const CALLOUT = {
   regex: `<aside>\n💡 ([\\S\\s]*?)<\/aside>`,
@@ -251,12 +251,14 @@ export const CALLOUT = {
 export const CODE = {
   regex:
     "({% code overflow='wrap' lineNumbers='true' %}\n)*{% code overflow='wrap' lineNumbers='true' %}
-```([\\S\\s]*?)\n```(\n{% endcode %})*",
+```
+{% endcode %}([\\S\\s]*?)\n{% code overflow='wrap' lineNumbers='true' %}
+```(\n{% endcode %})*",
   replacement:
     "{% code overflow='wrap' lineNumbers='true' %}\n```$2\n```\n{% endcode %}",
 };
 ```
-{% endcode %}`
+{% endcode %}
 
 # 발전 방향
 
