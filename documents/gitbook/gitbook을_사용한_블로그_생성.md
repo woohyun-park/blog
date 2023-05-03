@@ -21,8 +21,8 @@ npm run create documents/gitbook/gitbook을_사용한_블로그_생성
 ```
 {% endcode %}
 
-1. 변경사항을 add하고 commit하면 pre-commit 훅을 통해 자동으로 notion → gitbook 변환
-2. commit message를 작성하고 origin/main에 push
+3. 변경사항을 add하고 commit하면 pre-commit 훅을 통해 자동으로 notion → gitbook 변환
+4. commit message를 작성하고 origin/main에 push
 
 ## gitbook cli
 
