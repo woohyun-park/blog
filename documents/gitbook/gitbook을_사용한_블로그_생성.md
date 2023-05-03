@@ -14,7 +14,7 @@ gitbook을 설정하는것은 어렵지 않았는데, gitbook에서 지원하는
 2. npm run create을 사용해서 개발일지를 생성
 
 {% code overflow='wrap' lineNumbers='true' %}
-```jsx
+```
 npm run create documents/gitbook/gitbook을_사용한_블로그_생성
 ```
 {% endcode %}
@@ -35,7 +35,7 @@ gitbook은 데이터를 크게 3가지 계층으로 구분한다.
 - **subPage**: `gitbook을_사용한_블로그_생성.md`가 해당하는 하위 그룹이며, 실질적인 블로그 포스팅 작성을 하는 파일을 포함한다.
 
 {% code overflow='wrap' lineNumbers='true' %}
-```jsx
+```
 blog
 ├── README.md
 ├── SUMMARY.md
@@ -56,7 +56,7 @@ blog
 또한 문서를 생성 또는 삭제할때마다 폴더구조와 함께 SUMMARY.md의 목차도 변경된다.
 
 {% code overflow='wrap' lineNumbers='true' %}
-```jsx
+```
 // SUMMARY.md
 # Table of contents
 
@@ -79,7 +79,7 @@ blog
 따라서 해당 계층구조를 저장할 수 있는 파일을 저장하고 (summary.json), 생성 및 삭제시마다 해당 파일을 업데이트하는 방식을 사용하였다.
 
 {% code overflow='wrap' lineNumbers='true' %}
-```jsx
+```
 // sumamry.json
 {"frameworks":{"next.js":[],"react.js":[]},"documents":{"gitbook":["gitbook을_사용한_블로그_생성"]}}
 ```
@@ -88,7 +88,7 @@ blog
 create와 delete의 실행순서는 다음과 같다.
 
 {% code overflow='wrap' lineNumbers='true' %}
-```jsx
+```
 // 1. group, page, 또는 subPage 파일을 생성 또는 삭제한다
 // 2. summary.json 파일을 업데이트한다
 // 3. SUMMARY.md 파일을 업데이트한다
@@ -116,7 +116,7 @@ node.js 환경에서는 import와 export문을 사용할 수 없어서 es6로 �
 하지만 npm run build를 매번 실행하게 되는데, change가 detect 되었을때만 build를 실행할 수 있는 방법을 찾아보면 좋겠다 (다음 단계 1)
 
 {% code overflow='wrap' lineNumbers='true' %}
-```jsx
+```
 "scripts": {
   "postinstall": "husky install",
   "convert": "npm run build && node lib/functions/convert.js",
@@ -132,7 +132,7 @@ node.js 환경에서는 import와 export문을 사용할 수 없어서 es6로 �
 파일을 생성 또는 삭제하는 분기점마다 에러를 throw하고 catch하여 작업이 어디까지 완료되었는지 손쉽게 알 수 있도록 했다.
 
 {% code overflow='wrap' lineNumbers='true' %}
-```jsx
+```
 // utils/error.js
 export function wrapCatch(func, target, type = "creat") {
   try {
@@ -167,7 +167,7 @@ export function createSummary(summary) {
 - **utils**: 전역에서 도움을 줄 수 있는 함수들
 
 {% code overflow='wrap' lineNumbers='true' %}
-```jsx
+```
 .src
 ├── apis
 │   ├── create.js
@@ -199,7 +199,7 @@ notion과 gitbook의 마크다운 형식이 살짝 다른 부분이 있어서 �
 husky를 사용하여 pre-commit 훅이 작동하여 자동으로 마크다운이 노션 → 깃북으로 변경되고 stage하도록 설정했다.
 
 {% code overflow='wrap' lineNumbers='true' %}
-```jsx
+```
 // ./husky/pre-commit
 npm run convert && git add .
 ```
@@ -210,7 +210,7 @@ npm run convert && git add .
 convert의 경우에는 replace라는 라이브러리를 통해 간단하게 구현했다. option과 regex를 제공하면 알아서 해당 부분을 replace해주는 형식이다.
 
 {% code overflow='wrap' lineNumbers='true' %}
-```jsx
+```
 // consts/convert.js
 export const OPTION = {
   paths: ["."],
@@ -231,17 +231,16 @@ replace({ ...OPTION, ...CODE });
 
 ### regex
 
-정규표현식은 언제나 어렵다. 노션의 callout을 gitbook의 hit로 변경하는 작업은 aside를 단순하게 hint로 치환하면 되지만, 노션의 code를 gitbook의 code로 변경하는 작업에서는 별다른 처리 없이 치환만 하게되면 계속해서 code가 늘어나는 현상이 발생했다.
+정규표현식은 언제나 어렵다. 노션의 callout을 gitbook의 hit로 변경하는 작업은 aside를 단순하게 hint로 치환하면 되지만, 노션의 code를 gitbook의 code로 변경하는 작업에서는 ```부분이 겹쳐서 별다른 처리 없이 치환만 하게되면 계속해서 {code}가 늘어나는 현상이 발생했다.
 
-따라서 아래와 같이 code 부분을 `()`를 사용해 그룹으로 묶고 `*`을 사용해 해당 부분이 몇번 반복되던지 하나로 합쳐지도록 변경했다.
+따라서 아래와 같이 {code} 부분을 `()`를 사용해 그룹으로 묶고 `*`을 사용해 해당 부분이 몇번 반복되던지 하나로 합쳐지도록 변경했다.
 
-`({% code overflow='wrap' lineNumbers='true' %}\n)*`
+`({% code overflow='wrap' lineNumbers='true' %}\n)*` 
 
 → `{% code overflow='wrap' lineNumbers='true' %}`
 
 {% code overflow='wrap' lineNumbers='true' %}
 ```
-{% endcode %}jsx
 // consts/convert.js
 export const CALLOUT = {
   regex: `<aside>\n💡 ([\\S\\s]*?)<\/aside>`,
@@ -250,20 +249,19 @@ export const CALLOUT = {
 
 export const CODE = {
   regex:
-    "({% code overflow='wrap' lineNumbers='true' %}\n)*{% code overflow='wrap' lineNumbers='true' %}
-```
-{% endcode %}([\\S\\s]*?)\n{% code overflow='wrap' lineNumbers='true' %}
-```(\n{% endcode %})*",
+    "({% code overflow='wrap' lineNumbers='true' %}\n)*```([\\S\\s]*?)\n```(\n{% endcode %})*",
   replacement:
     "{% code overflow='wrap' lineNumbers='true' %}\n```$2\n```\n{% endcode %}",
 };
 ```
 {% endcode %}
 
+하지만 이 글을 업로드하면서 내용 안에 저 매칭문이 들어갈 경우에 잘못 포맷되는것을 발견했다. 매칭문을 어떻게 포맷
+
 # 발전 방향
 
-- [ ] 변경사항 감지하여 build
-- [ ] batch 작업 구현
+- [ ]  변경사항 감지하여 build
+- [ ]  batch 작업 구현
 
 # 태그
 
