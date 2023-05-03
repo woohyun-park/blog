@@ -235,9 +235,9 @@ replace({ ...OPTION, ...CODE });
 
 따라서 아래와 같이 {code} 부분을 `()`를 사용해 그룹으로 묶고 `*`을 사용해 해당 부분이 몇번 반복되던지 하나로 합쳐지도록 변경했다.
 
-`({% code overflow='wrap' lineNumbers='true' %}\n)*` 
+`(\{% code overflow='wrap' lineNumbers='true' %\}\n)*` 
 
-→ `{% code overflow='wrap' lineNumbers='true' %}`
+→ `\{% code overflow='wrap' lineNumbers='true' %\}`
 
 {% code overflow='wrap' lineNumbers='true' %}
 ```
