@@ -1,1 +1,1 @@
-{ "frameworks": { "react.js": [], "next.js": [] } }
+{"frameworks":{"next.js":[],"react.js":["커스텀_훅"]}}
