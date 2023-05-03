@@ -6,7 +6,9 @@ function createGroup(summary, group) {
   if (!summary[group]) {
     summary[group] = {};
     if (!fs.existsSync(group))
-      if (!fs.mkdirSync(group)) throw new Error(`Failed to create ${group}`);
+      fs.mkdir(group, (e) => {
+        if (e) throw new Error(`Failed to create ${group}`);
+      });
   }
 }
 
