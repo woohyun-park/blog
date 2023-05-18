@@ -129,7 +129,7 @@ export const useClickOutside = ({ onClickOutside }: Props) => {
 ```tsx
 // components/KeywordMain
 const { ref } = useClickOutside({
-	// ref의 바깥을 클릭하면 focused와 selected를 초기화
+  // ref의 바깥을 클릭하면 focused와 selected를 초기화
   onClickOutside: () => {
     setIsFocused(false);
     setSelected(0);
