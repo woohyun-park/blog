@@ -44,7 +44,7 @@
 
  
 
-<figure><img src=".gitbook/assets/Untitled (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 </div>
 
@@ -54,7 +54,7 @@
 
  
 
-<figure><img src=".gitbook/assets/Untitled (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 </div>
 
@@ -67,7 +67,7 @@
 1. 아젠다 없이 회의를 진행하니 회의시간이 길어지고, 이해가 없는 상태로 회의를 진행하다보니 의사결정이 자꾸만 미뤄진다.
 2. 코드 머지작업을 10명이 모두 참석한 상태로 진행하니 비효율적이다.
 
-<figure><img src=".gitbook/assets/Untitled (5) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 따라서 위와 같이 문제점 및 개선방안을 디스코드에 공유하였으며, 해당 주제에 대해서 다음 회의에서 의견을 나눴다. 최종적으로 결정된 개선안은 다음과 같았다.
 
