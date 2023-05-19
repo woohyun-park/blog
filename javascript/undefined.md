@@ -133,7 +133,9 @@ class App extends React.Component {
 }
 ```
 
-또한 리액트 공식문서에서는 event handler props가 on으로 시작하도록 네이밍하도록 권장하고 있다. (개인적으로 handle\~라고 많이 썼는데 on으로 통일하는것이 좋아보인다)
+또한 리액트 공식문서에서는 event handler props가 on으로 시작하도록 네이밍하도록 권장하고 있다.
+
+또 공식문서를 보면 props로 내리는건 on이지만, 선언하는건 handle로 작성하고 있다.
 
 {% hint style="info" %}
 By convention, event handler props should start with `on`, followed by a capital letter.
