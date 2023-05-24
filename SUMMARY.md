@@ -7,4 +7,5 @@
   * [\[원티드 프리온보딩\] 협업 방식 개선하기](project/undefined.md)
   * [\[블로그\] gitbook을 사용한 블로그 생성](project/gitbook-\_-\_-\_.md)
 * [javascript](javascript/README.md)
-  * [이벤트](javascript/undefined.md)
+  * [클로저](javascript/undefined.md)
+  * [이벤트](javascript/undefined-1.md)
