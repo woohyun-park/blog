@@ -1,348 +1,167 @@
-# 클로저
+# 이벤트
 
-## 스코프 (scope)
+## 이벤트란?
 
-* **동적 스코프**: 함수가 호출되는 시점에 결정
-* **정적 스코프**: 함수가 정의되는 시점에 결정. 자바스크립트는 정적 스코프!
+이벤트(event)는 무언가 일어났다는 신호이며 모든 DOM 노드는 이런 신호를 만들어 낸다. 아래는 DOM 이벤트의 예시.
+
+* `click`
+* `mouseover`와 `mouseout`
+* `mousedown`과 `mouseup`
+* `submit`
+* `focus`
+
+## 이벤트의 흐름
+
+HTML 문서의 각 요소들은 계층적으로 존재한다. 따라서 요소에 이벤트가 발생할 경우 연쇄적인 이벤트가 발생하게 된다. 이러한 현상을 이벤트 전파 (Event Propagation)이라고 부르며, 전파 방향에 따라 버블링과 캡쳐링으로 구분된다.
+
+<figure><img src="../.gitbook/assets/Untitled (6).png" alt=""><figcaption></figcaption></figure>
+
+1. **캡처링**: 이벤트가 하위 요소로 전파
 
 ```jsx
-let status = "studying";
+<div onClickCapture={() => onClickCapture(1)}>
+  <div onClickCapture={() => onClickCapture(2)}>
+    <div onClickCapture={() => onClickCapture(3)} />
+  </div>
+</div>
 
-function me(){
-  let status = "playing";
-  getStatus();
-}
-
-function getStatus(){
-  console.log(status);
-}
-
-me(); // studying
+// 1 2 3
 ```
 
-## 스코프 체인 (scope chain)
+공식문서에서 말하길, 캡쳐링은 사실상 라우터나 통계를 다루는게 아니라면 굳이 사용할 일은 없을 것이라고 한다.
 
-* 모든 함수 컨텍스트에는 `LexicalEnvironment` 객체가 있고, `environmentRecord`와 `outerEnvironmentReference`로 구성되어 있다.
-* `environmentRecord`에는 현재 함수 컨텍스트와 관련된 코드의 식별자 정보들이 저장되고 `outerEnvironmentReference`는 함수가 선언된 당시의 `Lexical Environment` 객체를 참조한다.
-* 어떤 식별자에 참조할 때 현재 컨텍스트의 `LexicalEnvrinonemt`를 탐색해서 발견되면 그 값을 반환하고, 발견하지 못하면 `outerEnvironmentReference`에 담긴 `LexicalEnvironment`를 탐색하는 과정을 거친다. 계속 찾지 못할 경우 전역 건텍스트의 `LexicalEnvironment`까지 탐색해 나간다. 이러한 현상을 `Scope Chain`이라 한다.
+{% hint style="info" %}
+Capture events are useful for code like routers or analytics, but you probably won’t use them in app code.
+{% endhint %}
 
-## 클로저 (closure)
-
-> A closure is the combination of a function and the lexical environment within which that function was declared.\
-> \
-> Closure makes it possible for a function to have “private” variables
-
-클로저는 함수가 선언됐을 때의 lexical environment를 기억하는 함수. 다시 말하자면, 반환된 내부함수가 자신이 선언됐을때의 환경을 기억하여 자신이 선언됐을때의 환경 밖에서 호출되어도 그 환경에 접근할 수 있는 함수.
+1. **타깃**: 이벤트가 실제 타깃 요소에 전달
+2. **버블링**: 이벤트가 상위 요소로 전파
 
 ```jsx
-// 1. innerFunc가 호출되면 스코프 체인을 통해 전역 객체, outerFunc의
-// 활성 객체, innerFunc의 활성 객체를 순차적으로 바인딩
-// 2. innerFunc의 함수 스코프에서 x 검색 -> 실패
-// 3. outerFunc의 함수 스코프에서 x 검색 -> 성공
+<div onClick={() => handleClick(1)}>
+  <div onClick={() => handleClick(2)}>
+    <div onClick={() => handleClick(3)} />
+  </div>
+</div>
 
-function outerFunc() {
-  let x = 10;
-  let innerFunc = function () { console.log(x); };
-  innerFunc();
-}
-
-outerFunc(); // 10
+// 3 2 1
 ```
 
-```jsx
-// 1. outerFunc는 innerFunc을 리턴하고 callstack에서의 실행 컨텍스트 소멸
-// 2. innerFunc가 호출되면 스코프 체인을 통해 전역 객체, outerFunc의
-// 활성 객체, innerFunc의 활성 객체를 순차적으로 바인딩 (outerFun의 실행 컨텍
-// 스트는 소멸했지만 활성 객체는 소멸하지 않음)
-// 3. innerFunc의 함수 스코프에서 x 검색 -> 실패
-// 4. outerFunc의 함수 스코프에서 x 검색 -> 성공
+## 이벤트 위임
 
-function outerFunc() {
-  let x = 10;
-  let innerFunc = function () { console.log(x); };
-  return innerFunc;
-}
-
-let inner = outerFunc();
-inner(); // 10
-```
-
-클로저의 역할
-
-* 현재 상태를 기억하고 최신 상태를 유지
-* 전역 변수의 사용 억제
-* 정보의 은닉
-
-## useState의 구현
-
-리액트에서는 useState, useEffect 등의 hook을 closure를 활용하여 구현한다.
-
-### 첫번째 구현
-
-클로저를 통해 정상동작하나, state가 getter 방식의 함수로 구현되었다.
+하위 요소를 클릭했을 때에서 버블링을 통해 상위요소로 전파됨을 이용하여 상위요소에서 하위 요소의 이벤트를 제어하는 방법
 
 ```jsx
-const useState = (initialValue) => {
-  let value = initialValue;
-
-  const state = () => value;
-
-  const setState = (newValue) => {
-    value = newValue;
-  };
-
-  return [state, setState];
-};
-
-const [count, setCount] = useState(0);
-
-console.log(count()); // 0
-setCount(1);
-console.log(count()); // 1
-```
-
-### 두번째 구현
-
-state를 변수로 선언하였으나, 변수이기 때문에 리턴된 순간 변경할 수 없는 상태이므로 원하는 대로 동작하지 않는다.&#x20;
-
-```jsx
-const useState = (initialValue) => {
-  let state = initialValue;
-
-  const setState = (newValue) => {
-    state = newValue;
-  };
-  
-  return [state, setState];
-};
-
-const [counter, setCounter] = useState(0);
-
-console.log(counter); // 0
-setCounter(1);
-console.log(counter); // 0
-```
-
-### 세번째 구현
-
-리액트는 state를 useState의 외부에 선언하여 두번째 구현에서의 문제를 해결한다.
-
-```jsx
-let state;
-function useState(initState) {
-  if (!state) state = initState;
-  const setState = (newState) => {
-    state = newState;
-  }
-  return [ state, setState ];
-}
-
-const Counter = () => {
-  const [count, setCount] = useState(1);
-
-  return {
-    click: () => setCount(count + 1),
-    render: () => console.log(count),
-  }
-}
-
-Counter().render(); // 1
-Counter().click();
-Counter().render(); // 2
-```
-
-추가적으로 react에서는 여러 개의 state 값들을 useState 바깥쪽에 배열 형식으로 순서대로 저장하여 관리하기 때문에, **동일한 순서로 hook이 호출되는것을 보장하기 위해** 아래와 같은 규칙이 필요하다.
-
-1. **react hook은 react 함수 최상위 레벨에서 사용되어야 한다.** 렌더링시에 hook은 동일한 순서로 호출되기 때문에 조건문, 반복문, 중첩 함수 안에서 사용될 수 없다. hook을 호출한 순간 각각의 상태에 대한 배열의 인덱스를 부여받아 상태를 관리하므로 특정 조건에 따라 hook이 실행된다면 인덱스값이 변경되어 잘못된 상태를 참조할 여지가 있다.
-2. **react 함수 안에서만 사용 가능하다.** 위와 같은 이유로 react 함수 안에서만 사용하여야 한다.
-
-## 함수형 인자
-
-> If the new state is computed using the previous state, you can pass a function to setState.\
-> \
-> React may batch multiple setState() calls into a single update for performance. During subsequent re-renders, the first value returned by useState will always be the most recent state after applying updates.
-
-```jsx
-const Counter = () => {
-  const [count, setCount] = useState(0);
-
-  const increase1 = () => {
-    setCount(count + 1);
-    setCount(count + 1);
-    setCount(count + 1);
-  }
-
-  const increase2 = () => {
-    setCount((count) => count + 1);
-    setCount((count) => count + 1);
-    setCount((count) => count + 1);
-  }
-}
-
-export default Counter;
-```
-
-이전 상태를 참조하여 상태를 변경하기 위해서는 함수형 인자를 사용해아 한다. 만약 일반적인 값을 인자로 사용한다면 원하는 형태로 동작하지 않을 수 있다. 이는 useState의 내부 구조와 연관이 있다.
-
-### useState의 내부 구조
-
-```jsx
-{
-  memoizedState: 0, // first hook
-  baseState: 0,
-  baseUpdate: null,
-  next: { // second hook
-    memoizedState: false,
-    baseState: false,
-    baseUpdate: null,
-    next: { // third hook
-      memoizedState: {
-        tag: 192,
-        create: () => {},
-        destory: undefined,
-        deps: [0, false],
-      },
-      baseState: null,
-      baseUpdate: null,
-      next: null
-    }
-  }
-}
+document.querySelector('#post-1').addEventListener('click', printId);
+document.querySelector('#post-2').addEventListener('click', printId);
+document.querySelector('#post-3').addEventListener('click', printId);
 ```
 
 ```jsx
-{
-  memoizedState: 0,
-  baseState: 0,
-  queue: {
-   last: {
-      action: 1, // setCount 설정값
-      eagerReducer: basicStateReducer(state, action),
-      eagerState: 1, // 최종 반환값
-    },
-    dispatch: dispatchAction.bind(bull, currenctlyRenderingFiber$1, queue),
-    lastRenderedReducer: basicStateReducer(state, action), // eagerState를 계산하는 reducer
-    lastRenderedState: 0,
-  },
-  baseUpdate: null,
-  next: null
-}
+<div className="cont" onClick={printId}>
+	<div id="post-1"/>
+	<div id="post-2"/>
+	<div id="post-3"/>
+</div>
 ```
 
-위 코드는 실제 hook의 내부 구조이다. 이중에서 next는 연결 리스트의 일종으로, 한 컴포넌트 안에서 여러 번의 실행되는 hook들을 연결해주는 역할을 한다.
+아래와 같이 작성하면 하위 div에서 무슨일이 일어나는지 손쉽게 파악이 가능하다.
 
 ```jsx
-function basicStateReducer(state, action) {
-  return typeof action === 'function' ? action(state) : action;
-}
+<div className="cont">
+	<div id="post-1" onClick={() => printId("post-1"}/>
+	<div id="post-2" onClick={() => printId("post-2"}/>
+	<div id="post-3" onClick={() => printId("post-3"}/>
+</div>
 ```
 
-리액트의 배치 프로세스는 이렇게 묶인 hook들을 한 번에 처리한 뒤 last를 생성하며, 최종 반환될 상태인 eagerState를 계산하는 함수는 reducer다. 해당 reducer에 넘기는 action 타입이 함수일 때는 이전 상태를 인자로 받으므로 기존 상태를 기반으로 새로운 상태를 업데이트할 수 있게 된다.
-
-## 클로저 트랩
+또한 react는 아래와 같이 map을 사용할 수 있으므로 보다 편리하다.
 
 ```jsx
-useEffect(() => {
-  setInterval(() => {
-    setCount(count + 1);
-  }, 500);
-}, []);
-
-useEffect(() => {
-  setInterval(() => {
-    console.log(count);
-  }, 500);
-}, []);
-
-// 0 0 0 0 ...
+<div className="cont">
+	{posts.map(post => <div id={post.id} onClick={() => printId(post.id)}/>)}
+</div>
 ```
 
-```jsx
-useEffect(() => {
-  setInterval(() => {
-    setCount(count + 1);
-  }, 500);
-}, [count]);
+또한 위임을 사용하게 되면 e.target.속성값에 접근해서 사용해야 하고, 각각의 요소에서 어떤 일이 일어나는지를 한눈에 알아보기 어렵기 때문에 이벤트 위임을 사용하는것보단 map을 사용해서 각각의 요소에 이벤트를 주입해주는것이 더 나은 구현방법인듯 하다.
 
-useEffect(() => {
-  setInterval(() => {
-    console.log(count);
-  }, 500);
-}, [count]);
+{% hint style="info" %}
+If you rely on propagation and it’s difficult to trace which handlers execute and why, try this approach instead.
+{% endhint %}
 
-// 0 0 1 2 1 2 3 2 3 4 0 0 1 2 ...
-```
+## react의 구현방식
 
-```jsx
-useEffect(() => {
-  let timer = setInterval(() => {
-    setCount(count + 1);
-  }, 500);
-  return () => clearInterval(timer);
-}, [count]);
+react에서는 1과 같은 코드를 내부적으로는 addEventListener를 사용하여 2와 같이 구현하고 추상화해서 보여주고 있다고 한다.
 
-useEffect(() => {
-  let timer = setInterval(() => {
-    console.log(count);
-  }, 500);
-  return () => clearInterval(timer);
-}, [count]);
-
-// 0 1 2 3 4 ...
-```
-
-deps 배열을 올바르게 설정하면 상태가 변경될 때마다 콜백함수가 실행되고 새로운 상태를 참조하게 되어 클로저 트랩을 고칠 수 있다. 또한 이전 상태(타이머, 이벤트 리스너 등)를 정리하는데에도 주의를 기울여야 한다.
-
-## 의문점
-
-1. ES6에 class가 추가되었는데, class도 결국 내부적으로는 closure로 동작할까?
-
-> **ChatGPT의 답변**\
-> In modern JavaScript, the **`class`** syntax was introduced as part of ECMAScript 2015 (ES6) to provide a more standardized and familiar syntax for creating classes. However, behind the scenes, closures are still involved in achieving encapsulation and private members in class implementations.
-
-ChatGPT는 class의 encapsulation과 private members를 구현하는데에 closure가 사용된다 라고 말한다. 물론 GPT를 믿을 수 없어서 조금 더 찾아봤는데, mdn에서는 아래와 같이 말하고 있다
-
-> **MDN - Classes**\
-> Classes are a template for creating objects. They encapsulate data with code to work on that data. Classes in JS are built on [prototypes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance\_and\_the\_prototype\_chain) but also have some syntax and semantics that are unique to classes.
-
-prototype은 아래와 같이 함수에서 사용되는 속성인데, class도 prototype을 사용하여 만들어졌고, 아래 코드 1은 코드 2의 형식으로도 작성할 수 있다고 말하고 있다. 따라서 ES6의 class는 내부적으로 함수와 closure를 사용해서 동작한다고 말할 수 있을 것 같다.
+> 얼마 전에 수업에서 들었던 middleware 컨셉이 적용되어 있다고도 말할 수 있을 것 같다. addEventListener는 여러개를 적용시켰을 때 적용한 순서대로 동작하기 때문에, 함수들을 순차적으로 체이닝 시킨다는 컨셉이 미들웨어의 컨셉과 유사한 듯 하다.
 
 ```jsx
 // 1
-function Box(value) {
-  this.value = value;
+class App extends React.Component {
+
+  handleClick = () => {
+    alert("Hi there");
+  };
+
+  render() {
+    return <button onClick={this.handleClick}>Say something</button>;
+  }
 }
-
-Box.prototype.getValue = function () {
-  return this.value;
-};
-
-const boxes = [new Box(1), new Box(2), new Box(3)];
 ```
 
 ```jsx
 // 2
-class Box {
-  constructor(value) {
-    this.value = value;
+class App extends React.Component {
+
+  handleClick = () => {
+    alert("Hi there");
+  };
+
+  componentDidMount() {
+    document.getElementById('foo')
+      .addEventListener('click', this.handleClick)
   }
 
-  getValue() {
-    return this.value;
+  componentWillUnmount() {
+    document.getElementById('foo')
+      .removeEventListener('click', this.handleClick)
+  }
+
+  render() {
+    return <button id="foo">Say something</button>;
   }
 }
 ```
 
+또한 리액트 공식문서에서는 event handler props가 on으로 시작하도록 네이밍하도록 권장하고 있다.
+
+또 공식문서를 보면 props로 내리는건 on이지만, 선언하는건 handle로 작성하고 있다.
+
+{% hint style="info" %}
+By convention, event handler props should start with `on`, followed by a capital letter.
+{% endhint %}
+
+## target, currentTarget
+
+`target`: 내가 클릭한 자식 요소
+
+`currentTarget`: 이벤트 핸들러가 부착된 부모의 위치
+
+## preventDefault(), stopPropagation()
+
+* `preventDefault()`: 브라우저 고유의 행동을 막아준다 (e.g. form submit시 refresh)
+* `stopPropagation()` : 이벤트 전파를 막아준다.
+
+다만 꼭 필요한 경우를 제외하곤 이벤트 전파를 막지 않는것이 좋다. 예를 들어, 서비스에서 행동 패턴을 분석하기 위해 이벤트 감지 시스템을 사용할 때 stopPropagation을 통해 막아놓는다면, 해당 영역은 죽은 영역이 되어버리기 때문.
+
 ## 링크
 
-[PoiemaWeb](https://poiemaweb.com/js-closure)
+[🌐 한눈에 이해하는 이벤트 흐름 제어 (버블링 & 캡처링)](https://inpa.tistory.com/entry/JS-%F0%9F%93%9A-%EB%B2%84%EB%B8%94%EB%A7%81-%EC%BA%A1%EC%B3%90%EB%A7%81)
 
-[\[React\] useState의 동작 원리와 클로저](https://seokzin.tistory.com/entry/React-useState%EC%9D%98-%EB%8F%99%EC%9E%91-%EC%9B%90%EB%A6%AC%EC%99%80-%ED%81%B4%EB%A1%9C%EC%A0%80)
+[PoiemaWeb](https://poiemaweb.com/js-event)
 
-[\[React\] 클로저와 useState Hooks (2)](https://yeoulcoding.me/169)
+[이벤트 버블링과 캡처링에 대한 정리](https://velog.io/@tlatjdgh3778/%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EB%B2%84%EB%B8%94%EB%A7%81%EA%B3%BC-%EC%BA%A1%EC%B2%98%EB%A7%81%EC%97%90-%EB%8C%80%ED%95%9C-%EC%A0%95%EB%A6%AC)
 
-[React Hook에서 클로저는 어디서 쓰일까?](https://talkwithcode.tistory.com/88)
+[React onClick event vs JS addEventListener](https://linguinecode.com/post/react-onclick-event-vs-js-addeventlistener)
 
-[React Hook과 Closure의 관계 (feat. useState)](https://www.fronttigger.dev/2022/react/react-hook-closure)
-
-[(번역) 리액트 훅(React Hooks)의 클로저 트랩(Closure Trap) 이해하기](https://velog.io/@superlipbalm/the-closure-trap-of-react-hooks)
+[Responding to Events – React](https://react.dev/learn/responding-to-events)
