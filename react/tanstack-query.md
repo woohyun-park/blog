@@ -10,7 +10,7 @@ react-query를 도입하면, 서버 데이터와 클라이언트 데이터를 �
 
 지금 개인 프로젝트인 아카이브에서 zustand를 사용해서 global state관리를 하고 있는데, 너무 많은 데이터를 global state로 관리하다보니까 코드의 복잡성도 높아지고 관리에 필요한 리소스가 너무 많이 사용되는 느낌이 있었다. 그래서 리팩토링할 방법을 찾고 있었는데, react-query를 적용해보려고 한다
 
-<figure><img src="../.gitbook/assets/Untitled (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (7) (2).png" alt=""><figcaption></figcaption></figure>
 
 ### useQuery
 

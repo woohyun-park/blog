@@ -2,6 +2,7 @@
 
 * [👨💻 woohyun-park](README.md)
 * [project](project/README.md)
+  * [\[아카이브\] atomic design과 compound component 패턴](project/atomic-design-compound-component.md)
   * [\[아카이브\] jest, testing-library, 그리고 storybook 도입](project/jest-testing-library-storybook.md)
   * [\[아카이브\] tailwindCSS 병합 해결](project/tailwindcss.md)
   * [\[원티드 프리온보딩\] react.js로 검색창 구현하기](project/react.js.md)
