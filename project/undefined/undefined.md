@@ -1,4 +1,4 @@
-# \[원티드 프리온보딩] 협업 방식 개선하기
+# 협업 방식 개선하기
 
 매일 아침 다양한 뉴스레터를 읽는데, 오늘은 팁스터라는 뉴스레터를 읽다가 [회의 그거.. 어떻게 잘하는 건데?](https://maily.so/tipster/posts/e83a6f72?mid=b361d956)라는 글을 읽고 공감가는 부분이 많아서 어떻게 회의를 잘 할수 있을지에 대해 간단하게 정리해보고 원티드 프리온보딩에서의 경험을 이야기해보려고 한다.
 
@@ -44,7 +44,7 @@
 
  
 
-<figure><img src="../.gitbook/assets/Untitled (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Untitled (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 </div>
 
@@ -54,7 +54,7 @@
 
  
 
-<figure><img src="../.gitbook/assets/Untitled (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Untitled (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 </div>
 
@@ -67,7 +67,7 @@
 1. 아젠다 없이 회의를 진행하니 회의시간이 길어지고, 이해가 없는 상태로 회의를 진행하다보니 의사결정이 자꾸만 미뤄진다.
 2. 코드 머지작업을 10명이 모두 참석한 상태로 진행하니 비효율적이다.
 
-<figure><img src="../.gitbook/assets/Untitled (5) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Untitled (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 따라서 위와 같이 문제점 및 개선방안을 디스코드에 공유하였으며, 해당 주제에 대해서 다음 회의에서 의견을 나눴다. 최종적으로 결정된 개선안은 다음과 같았다.
 

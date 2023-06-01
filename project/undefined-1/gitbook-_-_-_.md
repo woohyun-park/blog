@@ -1,4 +1,4 @@
-# \[블로그] gitbook을 사용한 블로그 생성
+# gitbook을 사용한 블로그 생성하기
 
 ## gitbook을 선택한 이유
 
@@ -46,7 +46,7 @@ blog
         └── README.md
 ```
 
-<figure><img src="../.gitbook/assets/Untitled (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Untitled (2).png" alt=""><figcaption></figcaption></figure>
 
 또한 문서를 생성 또는 삭제할때마다 폴더구조와 함께 SUMMARY.md의 목차도 변경된다.
 
