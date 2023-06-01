@@ -10,7 +10,7 @@
 
 ## 어플리케이션 ‘리프’ 속 예시
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/518eb616-702e-49cc-a9cb-1b2c4cb52f13/Untitled.png)
+<figure><img src="../.gitbook/assets/Untitled (14).png" alt=""><figcaption></figcaption></figure>
 
 한가지 예를 더 들자면, 위는 리프라는 어플리케이션의 온보딩 화면인데, 저 ‘첫 구독 무료로 시작하기’라는 버튼이 clickable한 버튼인지 swipeable한 버튼인지 알기가 어려웠다.
 

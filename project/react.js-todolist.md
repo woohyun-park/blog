@@ -1,4 +1,4 @@
-# \[원티드 프리온보딩] react.js로 todolist 구현하기
+# react.js로 todolist 구현하기
 
 원티드 프리온보딩 사전과제를 팀 단위의 best practice로 합치면서 고민했던 내용을 정리해본다. best practice를 도출하는 과정은 best practice와 가깝다고 생각하는 하나의 레포를 투표를 통해 선정하고, 해당 레포를 리팩토링하는 방식으로 진행했다.
 

@@ -4,29 +4,29 @@ jest, testing-library, 그리고 storybook을 도입하면서 보다 효율적�
 
 ## atomic design
 
-<figure><img src="../../.gitbook/assets/Untitled (13).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (13).png" alt=""><figcaption></figcaption></figure>
 
 화학적 관점에서 영감을 받은 디자인 시스템으로, 모든 것은 atom으로 구성되어 있고, atom들이 결합하여 molecule이 되고 molecule은 더 복잡한 organism으로 결합하여 궁극적으로 template과 page를 생성하는 방식이다.
 
 * **atom**: 더 이상 분해할 수 없는 기본 컴포넌트
 
-<figure><img src="../../.gitbook/assets/Untitled (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (7).png" alt=""><figcaption></figcaption></figure>
 
 * **organism**: 구체적으로 표현되고 컨텍스트를 가지므로 상대적으로 재사용성이 낮아지는 특징
 
-<figure><img src="../../.gitbook/assets/Untitled (8).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (8).png" alt=""><figcaption></figcaption></figure>
 
 * **molecule**: 여러 개의 atom을 결합하여 자신의 고유한 특성을 가지며 **한가지 일(Single Responsibility Principle, SRP)**을 한다! 재사용성, UI에서의 일관성, 테스트하기 쉬운 조건이라는 이점을 가지고 있다.
 
-<figure><img src="../../.gitbook/assets/Untitled (9).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (9).png" alt=""><figcaption></figcaption></figure>
 
 * **template**: 실제 컨텐츠가 없는 page 수준의 스켈레톤
 
-<figure><img src="../../.gitbook/assets/Untitled (10).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (10).png" alt=""><figcaption></figcaption></figure>
 
 * **page**: 유저가 볼 수 있는 실제 컨텐츠를 담은 template의 instance
 
-<figure><img src="../../.gitbook/assets/Untitled (11).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (11).png" alt=""><figcaption></figcaption></figure>
 
 ## molecule과 organism을 나누는 기준
 
@@ -37,7 +37,7 @@ jest, testing-library, 그리고 storybook을 도입하면서 보다 효율적�
 
 ## 중복 컴포넌트 또는 불필요한 props의 증가
 
-<figure><img src="../../.gitbook/assets/Untitled (12) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (12) (1).png" alt=""><figcaption></figcaption></figure>
 
 위와 같이 단순한 변경점임에도 새로운 컴포넌트를 생성하거나 props를 증가시켜야 했다. 나의 경우에도 비슷한 디자인의 컴포넌트들을 재사용하려고 노력하다보니 props가 속절없이 늘어나는 현상을 경험할 수 있었다. 이때 compound component를 사용하면 유연하게 컴포넌트 구조를 재정의 할 수 있었다.
 

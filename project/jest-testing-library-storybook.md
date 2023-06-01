@@ -1,4 +1,4 @@
-# \[아카이브] jest, testing-library, 그리고 storybook 도입
+# jest, testing-library, 그리고 storybook 도입하기
 
 아카이브라는 개인 프로젝트를 기능추가 및 리팩토링을 하면서 발전시켜나가고 있는데, 리팩토링 전에 컴포넌트들에 대한 테스트 코드 작성이 필요할 것 같다는 생각이 들었다. 또한 현재 명확한 구조 없이 나뉘어져있는 컴포넌트들을 atomic design을 활용하여 재분류하고, 프론트엔드에서 많이 사용하는 Jest와 react-testing-library, 그리고 storybook을 통해 체계적으로 관리해보면 어떨까 하여 해당 기술들을 도입하는 과정을 정리한다.
 

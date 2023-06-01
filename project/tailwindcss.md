@@ -1,4 +1,4 @@
-# \[아카이브] tailwindCSS 병합 해결
+# tailwindCSS 병합 해결하기
 
 ## tailwindCSS 사용시 문제점
 
