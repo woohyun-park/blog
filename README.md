@@ -19,4 +19,5 @@
   \- 또한 최신 기술 및 사용자 경험에 대한 뉴스레터 및 아티클을 구독하고 프론트엔드 기술 스터디를 진행하며 어떻게 더 나은 서비스를 제공할 수 있을지 생각합니다.
 
 Email: [woohyun.park@gmail.com](mailto:woohyun.park@gmail.com)\
-Github: [https://github.com/woohyun-park](https://github.com/woohyun-park)
+Github: [https://github.com/woohyun-park](https://github.com/woohyun-park)\
+Portfolio: [https://tinyurl.com/woohyun-park-dev](https://tinyurl.com/woohyun-park-dev)
