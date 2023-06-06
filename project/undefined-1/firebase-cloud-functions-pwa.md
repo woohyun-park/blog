@@ -2,7 +2,7 @@
 description: 작성중 ...
 ---
 
-# 개인 프로젝트: 하스스톤 퀘스트 알람
+# firebase로 cloud functions 스케쥴링하기 및 pwa 푸시알람 보내기
 
 ## firebase cloud functions
 
@@ -41,9 +41,9 @@ const updateBatch = async (type: "daily" | "weekly") => {
   const firestore = admin.firestore();
   const collectionRef = firestore.collection("quests");
 
-	// batch를 사용하면 원자적 읽기 및 쓰기 작업을 지원한다.
-	// 원자적 작업 집합에서는 모든 작업이 성공하거나 아니면 모두 적용되지 않는다.
-	// batch로 변경사항들을 수정하고 마지막에 batch.commit()을 통해서 변경사항들을 모두 저장한다.
+  // batch를 사용하면 원자적 읽기 및 쓰기 작업을 지원한다.
+  // 원자적 작업 집합에서는 모든 작업이 성공하거나 아니면 모두 적용되지 않는다.
+  // batch로 변경사항들을 수정하고 마지막에 batch.commit()을 통해서 변경사항들을 모두 저장한다.
   const batch = firestore.batch();
   const querySnapshot = await collectionRef.get();
   querySnapshot.forEach((doc) => {
