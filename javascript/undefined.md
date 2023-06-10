@@ -14,7 +14,7 @@
 
 HTML 문서의 각 요소들은 계층적으로 존재한다. 따라서 요소에 이벤트가 발생할 경우 연쇄적인 이벤트가 발생하게 된다. 이러한 현상을 이벤트 전파 (Event Propagation)이라고 부르며, 전파 방향에 따라 버블링과 캡쳐링으로 구분된다.
 
-<figure><img src="../.gitbook/assets/Untitled (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (6) (1).png" alt=""><figcaption></figcaption></figure>
 
 1. **캡처링**: 이벤트가 하위 요소로 전파
 
